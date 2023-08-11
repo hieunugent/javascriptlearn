@@ -94,9 +94,10 @@ const calcDisplaySumary = function (movements) {
     .reduce((acc, mov) => acc + mov, 0);
   const interest = movements
     .filter(mov => mov > 0)
-    .map(deposits => (deposits * 1.2) / 100).filter((int, i, arr)=> {
-      console.log(arr);
-      return int >=1;
+    .map(deposits => (deposits * 1.2) / 100)
+    .filter((int, i, arr) => {
+      // console.log(arr);
+      return int >= 1;
     })
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${income} $`;
@@ -118,6 +119,23 @@ const createUserNames = function (accs) {
   });
 };
 createUserNames(accounts);
+
+
+// Event Handle 
+let currentAccount;
+btnLogin.addEventListener('click', function(e){
+  e.preventDefault();
+  currentAccount= accounts.find(acc => acc.username === inputLoginUsername.value);
+  if (currentAccount.pin === Number(inputLoginPin.value)){
+    console.log('Login');
+  }
+  console.log(currentAccount);
+ 
+})
+
+
+
+
 
 /////////////////////////////////////////////////
 // LECTURES
@@ -193,7 +211,7 @@ const totalDepositsUSD = movements
   .filter(mov => mov > 0)
   .map(mov => mov * eurToUsd)
   .reduce((acc, mov) => acc + mov, 0);
-console.log(totalDepositsUSD);
+// console.log(totalDepositsUSD);
 // console.log(movements);
 // console.log(movementsUSD);
 // console.log(movementsUSDfor);
@@ -228,15 +246,18 @@ TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 
 GOOD LUCK 😀
 */
-const calAverageHumanAge = function (ages) {
-  const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
-  const adults = humanAges.filter(age => age >= 18);
-  const averageAge = adults.reduce(
-    (acc, age, i, arr) => acc + age / arr.length,
-    0
-  );
-  return averageAge;
-};
+const calAverageHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
 const avg1 = calAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 const avg2 = calAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 // console.log(avg1, avg2);
+
+const firstWithdrawal = movements.find(mov => mov < 0);
+// console.log(firstWithdrawal);
+// console.log(accounts);
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+// console.log(account);

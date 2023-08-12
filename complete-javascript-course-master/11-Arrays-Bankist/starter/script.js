@@ -85,16 +85,16 @@ const calcDislayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} $`;
 };
-const calcDisplaySumary = function (movements) {
-  const income = movements
+const calcDisplaySumary = function (account) {
+  const income = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  const expands = movements
+  const expands = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  const interest = movements
+  const interest = account.movements
     .filter(mov => mov > 0)
-    .map(deposits => (deposits * 1.2) / 100)
+    .map(deposits => (deposits * account.interestRate) / 100)
     .filter((int, i, arr) => {
       // console.log(arr);
       return int >= 1;
@@ -127,27 +127,22 @@ btnLogin.addEventListener('click', function(e){
   e.preventDefault();
   currentAccount= accounts.find(acc => acc.username === inputLoginUsername.value);
   if (currentAccount.pin === Number(inputLoginPin.value)){
-    console.log('Login');
-    console.log(currentAccount);
-  // Display UI and Message
-  labelWelcome.textContent =`Welcome back ${currentAccount.owner.split(' ')[0]}`;
-  containerApp.style.opacity = 100;
-  inputLoginUsername =100;
-  // Display Movements
-  displayMovements(currentAccount.movements)
-  // Display Balance
-  calcDislayBalance(currentAccount.movements)
-  // Display Sumary
-  calcDisplaySumary(currentAccount.movements)
-
+    containerApp.style.opacity = 100;
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+    displayMovements(currentAccount.movements);
+    calcDislayBalance(currentAccount.movements);
+    calcDisplaySumary(currentAccount);
   }
+
+ 
 })
 
 
 
 
 
-/////////////////////////////////////////////////
+///////////////////////////////////////////////// 
 // LECTURES
 
 const currencies = new Map([

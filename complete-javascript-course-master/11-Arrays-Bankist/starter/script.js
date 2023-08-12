@@ -79,7 +79,7 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 // console.log(accounts);
 const calcDislayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
@@ -105,9 +105,9 @@ const calcDisplaySumary = function (movements) {
   labelSumInterest.textContent = `${interest} $`;
 };
 
-calcDislayBalance(account1.movements);
+// calcDislayBalance(account1.movements);
 
-calcDisplaySumary(account1.movements);
+// calcDisplaySumary(account1.movements);
 
 const createUserNames = function (accs) {
   accs.forEach(function (acc) {
@@ -128,9 +128,19 @@ btnLogin.addEventListener('click', function(e){
   currentAccount= accounts.find(acc => acc.username === inputLoginUsername.value);
   if (currentAccount.pin === Number(inputLoginPin.value)){
     console.log('Login');
+    console.log(currentAccount);
+  // Display UI and Message
+  labelWelcome.textContent =`Welcome back ${currentAccount.owner.split(' ')[0]}`;
+  containerApp.style.opacity = 100;
+  inputLoginUsername =100;
+  // Display Movements
+  displayMovements(currentAccount.movements)
+  // Display Balance
+  calcDislayBalance(currentAccount.movements)
+  // Display Sumary
+  calcDisplaySumary(currentAccount.movements)
+
   }
-  console.log(currentAccount);
- 
 })
 
 

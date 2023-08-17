@@ -64,7 +64,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  const movs = sort ?  movements.slice().sort((a,b)=> a - b) :movements
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
@@ -187,12 +187,11 @@ btnClose.addEventListener('click', function (e) {
   inputTransferAmount.value = inputTransferTo.value = '';
 });
 let sorted = false;
-btnSort.addEventListener('click', function(e){
+btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
-})
-
+});
 
 /////////////////////////////////////////////////
 // LECTURES
@@ -335,23 +334,35 @@ const accountMovements = accounts.map(acc => acc.movements);
 const allMovements = accountMovements.flat();
 const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
 
-
 // flat map replace for map().flat()
 const overalBalance2 = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, mov) => acc + mov, 0);
 // console.log(overalBalance, overalBalance2);
-// sort method in array is converse all element in array to strings anh sort 🇮🇹 
+// sort method in array is converse all element in array to strings anh sort 🇮🇹
 
-console.log(movements.sort((a,b)=> {
-  if(a > b) return 1; // return > 0 A, B keep order: 
-  if (b> a) return -1;// return < 0 B, A switch order: 
-}));
-// Fill 
-arr = [1,2,3,4,5,6,7];
-arr.fill(23,2,6);
-console.log(new Array(1,2,3,4,5,6,7,8));
+// console.log(
+//   movements.sort((a, b) => {
+//     if (a > b) return 1; // return > 0 A, B keep order:
+//     if (b > a) return -1; // return < 0 B, A switch order:
+//   })
+// );
+// Fill
+arr = [1, 2, 3, 4, 5, 6, 7];
+arr.fill(23, 2, 6);
+// console.log(new Array(1, 2, 3, 4, 5, 6, 7, 8));
 const x = new Array(7);
-// Array.from 
-const y = Array.from({length:7}, ()=> 1);
-const z = Array.from({length:7}, (_, i)=> i+1 )
+// Array.from
+const y = Array.from({ length: 7 }, () => 1);
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('$', '')));
+    console.log(movementsUI);
+});
+
+const bankDepositSum = accounts.flatMap(acc => acc.movements).filter(mov => mov > 0).reduce((sum, cur)=> sum + cur,0);
+console.log(bankDepositSum);
+

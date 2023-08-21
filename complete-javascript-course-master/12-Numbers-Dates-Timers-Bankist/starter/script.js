@@ -88,12 +88,18 @@ const displayMovements = function (movements, sort = false) {
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = new Date(movements.movementsDates[i]);
 
-    const html = `
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const displayDate = `${day}/${month}/${year}`;
+    const html = `   
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+        <div class="movements__date">${displayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -154,6 +160,18 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+// Fake always login 
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+const now = new Date();
+const day = `${now.getDate()}`.padStart(2,0);
+const month = `${now.getMonth()+1}`.padStart(2,0);
+const year = now.getFullYear();
+const hour = now.getHours();
+const min = now.getMinutes();
+labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -266,3 +284,36 @@ console.log(Number.isFinite(2/3));
 // Math.ceil round up
 // Math.floor round down
 // .toFixed(n) n is number of decimals point
+labelBalance.addEventListener('click', function(){
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i %2 === 0) row.style.backgroundColor = 'orangered';
+    if (i%3 ===0 ) row.style.backgroundColor = 'blue'
+  })
+}
+)
+// NUmeric separation using under score not begin or ending not double under score 
+// can not do it in the strings
+const diameter = 233_000_020_000;
+// Big Int can not mix big Int with other number
+// exception is comperation 
+// division with bigint will be cut off the decimal points
+// console.log(Number.MAX_SAFE_INTEGER);
+// console.log(6786783678136783678623876872678367826378n);
+// console.log(BigInt(6786783678136783678623876872678367826378));
+// console.log(20n < 22);
+// console.log(20n === 20);
+// console.log(typeof 20n );
+// console.log(20n == '20');
+
+// // date 
+// const future = new Date(2030,10,18,15,23);
+// console.log(future);
+// console.log(future.getFullYear());
+// console.log(future.getMonth());
+// console.log(future.getDay());
+// console.log(future.getTime());
+// console.log(future.getMinutes());
+// console.log(future.toDateString());
+// console.log(future.toTimeString());
+// console.log(future.toISOString());
+// console.log(future.toLocaleString());

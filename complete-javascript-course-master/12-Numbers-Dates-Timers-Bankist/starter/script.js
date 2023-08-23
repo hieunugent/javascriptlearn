@@ -131,7 +131,7 @@ const displayMovements = function (acc, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = formatCur(acc.balance, acc.locale,acc.currency);
 };
 
 const calcDisplaySummary = function (acc) {
@@ -139,12 +139,12 @@ const calcDisplaySummary = function (acc) {
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
  
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes,acc.locale,acc.currency);
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -154,7 +154,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 
 const createUsernames = function (accs) {
@@ -178,14 +178,34 @@ const updateUI = function (acc) {
   // Display summary
   calcDisplaySummary(acc);
 };
+const startLogOutTimer = function (){
+  //set time to 5 minute 
+  let time = 30;
+  // call timer every second 
+  const timer =  setInterval(() => {
+    const min = String(Math.trunc(time/60)).padStart(2,0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    //decrese 1s;
+    time--;
+    // when time is zero logout timer 
+    if(time === 0 ){
+      clearInterval(timer)
+       labelWelcome.textContent = "Log in to get started";
+       containerApp.style.opacity = 0;
+    }
+  }, 1000);
+
+
+}
 
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
 // Fake always login
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // const now = new Date();
 // const day = `${now.getDate()}`.padStart(2, 0);
@@ -232,7 +252,8 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-
+    // Log Out timer 
+    startLogOutTimer();
     // Update UI
     updateUI(currentAccount);
   }
@@ -270,11 +291,18 @@ btnLoan.addEventListener('click', function (e) {
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
-    currentAccount.movements.push(amount);
-    // Add Loan date
-    currentAccount.movementsDates.push(new Date());
-    // Update UI
-    updateUI(currentAccount);
+ 
+    setTimeout(() => {
+         currentAccount.movements.push(amount);
+         // Add Loan date
+         currentAccount.movementsDates.push(new Date().toISOString());
+         // Update UI
+         updateUI(currentAccount);
+    }, 2500);
+
+
+
+
   }
   inputLoanAmount.value = '';
 });
@@ -329,8 +357,7 @@ console.log(Number.isFinite(2 / 3));
 // .toFixed(n) n is number of decimals point
 labelBalance.addEventListener('click', function () {
   [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
-    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
-    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+    if (i % 2 === 0) row.style.backgroundColor = 'gray';
   });
 });
 // NUmeric separation using under score not begin or ending not double under score

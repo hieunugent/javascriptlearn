@@ -179,29 +179,33 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 const startLogOutTimer = function (){
-  //set time to 5 minute 
-  let time = 30;
-  // call timer every second 
-  const timer =  setInterval(() => {
+  const ticker = () => {
     const min = String(Math.trunc(time/60)).padStart(2,0);
     const sec = String(time % 60).padStart(2, 0);
     labelTimer.textContent = `${min}:${sec}`;
     //decrese 1s;
-    time--;
+   
     // when time is zero logout timer 
     if(time === 0 ){
       clearInterval(timer)
        labelWelcome.textContent = "Log in to get started";
        containerApp.style.opacity = 0;
     }
-  }, 1000);
+     time--;
+  };
+  //set time to 5 minute 
+  let time = 30;
+  // call timer every second 
+  ticker()
+  timer =  setInterval(ticker, 1000);
 
 
 }
 
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
+
 // Fake always login
 // currentAccount = account1;
 // updateUI(currentAccount);
@@ -221,7 +225,7 @@ btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
   e.preventDefault();
 
-  currentAccount = accounts.find(
+  currentAount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
   // console.log(currentAccount);
@@ -252,8 +256,9 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-    // Log Out timer 
-    startLogOutTimer();
+    //TIMER
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
     // Update UI
     updateUI(currentAccount);
   }
@@ -277,10 +282,13 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     // Add transfer date
-    currentAccount.movementsDates.push(new Date());
-    receiverAcc.movementsDates.push(new Date());
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
     // Update UI
     updateUI(currentAccount);
+    // Reset timer 
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -291,19 +299,17 @@ btnLoan.addEventListener('click', function (e) {
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
- 
     setTimeout(() => {
-         currentAccount.movements.push(amount);
-         // Add Loan date
-         currentAccount.movementsDates.push(new Date().toISOString());
-         // Update UI
-         updateUI(currentAccount);
+      currentAccount.movements.push(amount);
+      // Add Loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
+      // Update UI
+      updateUI(currentAccount);
     }, 2500);
-
-
-
-
   }
+  // Reset timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
   inputLoanAmount.value = '';
 });
 
@@ -328,6 +334,8 @@ btnClose.addEventListener('click', function (e) {
   }
 
   inputCloseUsername.value = inputClosePin.value = '';
+  // Reset timer
+  clearInterval(timer);
 });
 
 let sorted = false;

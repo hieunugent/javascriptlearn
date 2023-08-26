@@ -180,4 +180,19 @@ console.log(h1.parentElement.children);
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
-// this is not good practice because it will slowdow the 
+// this is not good practice because it will slowdown the page
+// tabs.forEach(t => t.addEventListener('click',()=> console.log('TAB')));
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+  console.log(clicked);
+  if (!clicked) return;
+
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+
+  clicked.classList.add('operations__tab--active');
+  // Active content area
+  tabsContent.forEach(t=> t.classList.remove("operations__content--active"));
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});

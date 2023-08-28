@@ -7,6 +7,15 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+//TAP Components
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+const nav = document.querySelector('.nav');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -27,8 +36,7 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
+
 btnScrollTo.addEventListener('click', function (e) {
   const s1coords = section1.getBoundingClientRect();
   console.log(s1coords);
@@ -162,24 +170,21 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 // });
 // TRAVERSING DOM
 const h1 = document.querySelector('h1');
-console.log(h1.querySelectorAll('.highlight'));
-console.log(h1.childNodes);
-console.log(h1.children);
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children);
 h1.firstElementChild.style.color = 'white';
 h1.lastElementChild.style.color = 'white';
 
 h1.closest('h1').style.background = 'var(--gradient-primary:)';
 // going sideways siblings
-console.log(h1.previousElementSibling);
-console.log(h1.nextElementSibling);
-console.log(h1.parentElement.children);
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+// console.log(h1.parentElement.children);
 [...h1.parentElement.children].forEach(function (el) {
   if (el !== h1) el.style.transform = 'scale(0.5)';
 });
-//TAP Components
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
+
 // this is not good practice because it will slowdown the page
 // tabs.forEach(t => t.addEventListener('click',()=> console.log('TAB')));
 tabsContainer.addEventListener('click', function (e) {
@@ -191,8 +196,24 @@ tabsContainer.addEventListener('click', function (e) {
 
   clicked.classList.add('operations__tab--active');
   // Active content area
-  tabsContent.forEach(t=> t.classList.remove("operations__content--active"));
+  tabsContent.forEach(t => t.classList.remove('operations__content--active'));
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+// Menu fade animation
+const handleHover = function(e, opacity){
+ if(e.target.classList.contains('nav__link')){
+   console.log(this, e.currentTarget);
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if(el !==link) el.style.opacity =opacity;
+    });
+    logo.style.opacity = opacity;
+  }
+}
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));

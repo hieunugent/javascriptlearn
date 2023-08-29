@@ -202,19 +202,19 @@ tabsContainer.addEventListener('click', function (e) {
     .classList.add('operations__content--active');
 });
 // Menu fade animation
-const handleHover = function(e, opacity){
- if(e.target.classList.contains('nav__link')){
-   console.log(this, e.currentTarget);
+const handleHover = function (e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
+    console.log(this, e.currentTarget);
     const link = e.target;
     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('img');
 
     siblings.forEach(el => {
-      if(el !==link) el.style.opacity =this;
+      if (el !== link) el.style.opacity = this;
     });
     logo.style.opacity = this;
   }
-}
+};
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 // Sticky navigation
@@ -245,10 +245,33 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // observer.observe(section1);
 
 const header = document.querySelector('.header');
-const stickyNav = function(entries){
-  const [entry] = entries
+const stickyNav = function (entries) {
+  const [entry] = entries;
   console.log(entries);
   console.log(entry);
-}
-const headerObserver = new IntersectionObserver(stickyNav, { root:null, threshold:0});
+  if(!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: '-40px'
+});
 headerObserver.observe(header);
+// reveal sections
+const allSections = document.querySelectorAll('.section')
+const revealSection = function(entries, observer){
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unoberser(entry.target)
+}
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root:null,
+  threshold: 0.15,
+})
+allSections.forEach(function(section){
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+})

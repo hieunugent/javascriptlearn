@@ -39,14 +39,14 @@ document.addEventListener('keydown', function (e) {
 
 btnScrollTo.addEventListener('click', function (e) {
   const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
-  console.log(e.target.getBoundingClientRect());
-  console.log('Current scroll (x/y)', window.pageXOffset, window.pageYOffset);
-  console.log(
-    'height/width viewport',
-    document.documentElement.clientHeight,
-    document.documentElement.clientWidth
-  );
+  // console.log(s1coords);
+  // console.log(e.target.getBoundingClientRect());
+  // console.log('Current scroll (x/y)', window.pageXOffset, window.pageYOffset);
+  // console.log(
+  //   'height/width viewport',
+  //   document.documentElement.clientHeight,
+  //   document.documentElement.clientWidth
+  // );
   // window.scrollTo(
   //   {left: s1coords.left + window.pageXOffset,
   //   top:  s1coords.top + window.pageYOffset,
@@ -247,8 +247,8 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 const header = document.querySelector('.header');
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entries);
-  console.log(entry);
+  // console.log(entries);
+  // console.log(entry);
   if(!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
 };
@@ -262,10 +262,10 @@ headerObserver.observe(header);
 const allSections = document.querySelectorAll('.section')
 const revealSection = function(entries, observer){
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
   if (!entry.isIntersecting) return;
   entry.target.classList.remove('section--hidden');
-  observer.unoberser(entry.target)
+  observer.unobserve(entry.target);
 }
 const sectionObserver = new IntersectionObserver(revealSection, {
   root:null,
@@ -275,3 +275,15 @@ allSections.forEach(function(section){
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 })
+//Lazy Load images
+const imgTargets = document.querySelectorAll('img[data-src]');
+// console.log(imgTargets);
+const loadImg = function(entries, observer){
+  const [entry] = entries;
+  console.log(entry);
+};
+const imgObserver = new IntersectionObserver(loadImg,{
+  root: null,
+  threshold:0
+})
+imgTargets.forEach(img => imgObserver.observe(img));

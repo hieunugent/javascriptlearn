@@ -34,3 +34,4 @@ console.log(jonas);
 //4. function automatically return {}
 console.log(jonas instanceof person);
 console.log(jay instanceof person);
+//prototypes 

@@ -14,3 +14,23 @@ Encapsulation: keeping properties and method s private inside the class , so the
 Inheritance: parent class inherit by others. making all properties and methods of a certain class available to a child class. forming a hierarchical relationship between classes. this allows us to reuse common logic and to model real-world relationships
 Polymorphism: a child class can overwrite a method it inherit from a parent class.
 */
+
+const person = function(firstName, birthYear){
+   this.firstName = firstName;
+   this.birthYear = birthYear;
+   // never create method inside function
+   /*
+    this.calcAge = function(){
+        console.log(2037 - this.birthYear);
+    }
+   */ 
+}
+const jonas = new person('Jonas',1991);
+const jay = "jay"
+console.log(jonas);
+//1. new() is created  
+//2. function is called this = {}
+//3. {} linked to property
+//4. function automatically return {}
+console.log(jonas instanceof person);
+console.log(jay instanceof person);

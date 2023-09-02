@@ -44,3 +44,7 @@ console.log(jonas.__proto__ === Person.prototype);
 
 console.log(Person.prototype.isPrototypeOf(jonas));
 //.prototypeOfLinkedObjects
+
+Person.prototype.species = "Homo Sapiens";
+console.log(jonas.species);
+console.log(jonas.hasOwnProperty("firstName"));

@@ -56,3 +56,12 @@ the new object is linked (__proto__property) to the constructor function's proto
 the new object is returned from the constructor function call
 
 */
+// console.log(jonas.__proto__.__proto__);
+// console.log(jonas.__proto__.__proto__.__proto__);
+
+// Add new method to prototype: Should not do this because nee JS version may have same method with different function, or in the big team will do the same method which will break your code later
+const arr = [1,2,3,4,5,6,4,5,6,4,5,6,7,8 ,9];
+Array.prototype.unique = function(){
+    return [...new Set(this)];
+}
+console.log(arr.unique());

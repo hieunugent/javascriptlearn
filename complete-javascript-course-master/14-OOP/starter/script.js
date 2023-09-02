@@ -15,7 +15,7 @@ Inheritance: parent class inherit by others. making all properties and methods o
 Polymorphism: a child class can overwrite a method it inherit from a parent class.
 */
 
-const person = function(firstName, birthYear){
+const Person = function(firstName, birthYear){
    this.firstName = firstName;
    this.birthYear = birthYear;
    // never create method inside function
@@ -25,13 +25,22 @@ const person = function(firstName, birthYear){
     }
    */ 
 }
-const jonas = new person('Jonas',1991);
+const jonas = new Person('Jonas',1991);
 const jay = "jay"
-console.log(jonas);
+// console.log(jonas);
 //1. new() is created  
 //2. function is called this = {}
 //3. {} linked to property
 //4. function automatically return {}
-console.log(jonas instanceof person);
-console.log(jay instanceof person);
+// console.log(jonas instanceof person);
+// console.log(jay instanceof person);
 //prototypes 
+Person.prototype.calcAge = function(){
+    console.log(2023-this.birthYear);
+}
+jonas.calcAge();
+
+console.log(jonas.__proto__ === Person.prototype);
+
+console.log(Person.prototype.isPrototypeOf(jonas));
+//.prototypeOfLinkedObjects

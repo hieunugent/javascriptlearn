@@ -48,3 +48,11 @@ console.log(Person.prototype.isPrototypeOf(jonas));
 Person.prototype.species = "Homo Sapiens";
 console.log(jonas.species);
 console.log(jonas.hasOwnProperty("firstName"));
+/*
+the new operator :(how it work with function constructors and ES6 classes)
+an empty object is created 
+this keyword in constructor function call is set to the new object 
+the new object is linked (__proto__property) to the constructor function's prototype property
+the new object is returned from the constructor function call
+
+*/

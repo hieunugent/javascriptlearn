@@ -95,4 +95,51 @@ Car.prototype.break = function(){
 const bmw = new Car('BMW', 120);
 const mercedes = new Car('Mercedes', 90);
 
+// class expression
+// const PersionCl = class{}
+// class declaration 
+class PersionCl{
+    constructor(fullname, birthYear){
+        this.fullname = fullname;
+        this.birthYear = birthYear;
+    }
+    // methods will be add to .prototype property
+    calcAge(){
+        console.log(2023 - this.birthYear);
+    }
+    set fullname (name) {
+        if (name.includes(' ')){
+            this._fullName = name;
+        }else{
+            alert(`${name} is not fullname`)
+        }
+    }
+    get fullname(){
+        return this._fullName;
+    }
+}
+const jessica = new PersionCl('Jessica Wall', 1996);
+jessica.calcAge()
 
+PersionCl.prototype.greet = function(){
+    console.log(`Hey ${this.fullname}`);
+}
+jessica.greet();
+// 1. classes are not Hoisted
+// 2. class are first class citizens
+// 3. classes are executed in strict mode
+// SETTER AND GETTER
+
+const account = {
+    owner: 'Jonas',
+    movements : [200,530,120,300],
+    get latest(){
+        return this.movements.slice(-1).pop();
+    },
+    set latest(mov){
+        this.movements.push(mov)
+    }
+}
+console.log(account.latest);
+account.latest = 50;
+console.log(account.movements);

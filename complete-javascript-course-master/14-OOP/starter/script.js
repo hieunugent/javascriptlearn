@@ -156,8 +156,13 @@ account.latest = 50;
 // Person.hey();
 // PersionCl.hey();
 const PersonProto = {
+
     calcAge(){
         console.log(2023 - this.birthYear);
+    },
+    init(fullName, birthYear){
+        this.fullName = fullName;
+        this.birthYear = birthYear;
     }
 }
 const steven = Object.create(PersonProto);
@@ -267,3 +272,4 @@ class StudentCl extends PersionCl{
         );
     }
 }
+

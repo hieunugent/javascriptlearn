@@ -246,3 +246,24 @@ EV.prototype.accelerate = function () {
   console.log(`${this.make} is going at ${this.speed} km/h, with charge of ${this.charge}`);
 };
 
+
+// inheritance class 
+
+class StudentCl extends PersionCl{
+    constructor(fullName, birthYear, course){
+        super(fullName, birthYear);
+        this.course = course;
+    }
+    introduce(){
+        console.log(`My Name is ${this.fullname}, and I study ${this.course}`);
+    }
+    calcAge(){
+        console.log(
+          `I'm ${
+            2023 - this.birthYear
+          } years old, but as a student i feel more like ${
+            2023 - this.birthYear +10
+          } `
+        );
+    }
+}

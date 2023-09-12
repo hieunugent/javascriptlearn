@@ -273,3 +273,42 @@ class StudentCl extends PersionCl{
     }
 }
 
+class Account {
+  // 1. Public fields (instance)
+
+  locale = navigator.language;
+
+  // 2. Private Fields
+  #movements = [];
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+
+    // protected
+    this._pin = pin;
+    // this._movements = [];
+    // this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account {owner}`);
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+  _approvalLoan(val) {
+    return true;
+  }
+  requestLoan(val) {
+    if (this._approvalLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved ${val}`);
+    }
+  }
+}
+const acc1 = new Account('Jonas', 'EUR', 1111);
+acc1.deposit(250);
+acc1.withdraw(200);
+console.log(acc1);

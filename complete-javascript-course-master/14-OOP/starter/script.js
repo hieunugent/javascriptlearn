@@ -251,7 +251,25 @@ EV.prototype.accelerate = function () {
   console.log(`${this.make} is going at ${this.speed} km/h, with charge of ${this.charge}`);
 };
 
-
+class EVCl extends CarCL{
+    #charge;
+    constructor(make, speed, charge){
+        super(make, speed)
+        this.#charge = charge
+           }
+        
+        chargeBattery(chargeTo){
+               this.#charge = chargeTo;
+               return this
+           }
+        accelerate () {
+             this.speed +=20;
+             this.#charge--;
+             console.log(`${this.make} is going at ${this.speed} km/h, with charge of ${this.charge}`);
+             return this;
+           };
+       
+}
 // inheritance class 
 
 class StudentCl extends PersionCl{
@@ -278,14 +296,15 @@ class Account {
 
   locale = navigator.language;
 
-  // 2. Private Fields
+  // 2. Private Fields (instances)
   #movements = [];
+  #pin;
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
 
-    // protected
-    this._pin = pin;
+    //  protected
+    this.#pin = pin;
     // this._movements = [];
     // this.locale = navigator.language;
 
@@ -294,18 +313,22 @@ class Account {
 
   deposit(val) {
     this.#movements.push(val);
+    return this;
   }
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
   _approvalLoan(val) {
     return true;
+    return this;
   }
   requestLoan(val) {
     if (this._approvalLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved ${val}`);
     }
+    return this
   }
 }
 const acc1 = new Account('Jonas', 'EUR', 1111);

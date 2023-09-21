@@ -19,6 +19,7 @@ class Workout {
     this.distance = distance;
     this.duration = duration;
   }
+
 }
 class Running extends Workout {
   constructor(coords, distance, duration, cadence) {
@@ -51,6 +52,7 @@ console.log(run1, cyc1);
 class App {
   #map;
   #mapEvent;
+  #workouts = [];
   constructor() {
     this._getPosition();
     form.addEventListener('submit', this._newWorkout.bind(this));
@@ -113,6 +115,9 @@ class App {
         // !Number.isFinite(cadence)
       )
         return alert('Input has to be positive number');
+
+      const workout = new Running([lat,lng], distance,duration,cadence);
+      this.#workouts.push(workout);
     }
     // if workout cycling, create cycling object
     if (type === 'cycling') {

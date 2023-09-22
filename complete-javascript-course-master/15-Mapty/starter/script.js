@@ -168,6 +168,8 @@ class App {
 
     // Hide form + clear input fields
     this._hideForm();
+    // Set local storage to all workout
+    this._setLocalStorage();
   }
   _hideForm() {
     inputDistance.value =
@@ -258,6 +260,13 @@ class App {
     });
     // using public interface:
     workout.click();
+  }
+  _setLocalStorage(){
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts))
+  }
+  _getLocalStorage(){
+    const data = localStorage.getItem('workout');
+    console.log(data);
   }
 }
 

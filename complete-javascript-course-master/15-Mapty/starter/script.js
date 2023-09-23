@@ -38,7 +38,9 @@ class Workout {
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
   }
-  click(){ this.clicks++;}
+  click() {
+    this.clicks++;
+  }
 }
 class Running extends Workout {
   type = 'running';
@@ -79,7 +81,10 @@ class App {
   #mapZoomLevel = 13;
 
   constructor() {
+    //get user position
     this._getPosition();
+    // get data form localstorage 
+    this._getLocalStorage()
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -109,6 +114,7 @@ class App {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
     this.#map.on('click', this._showForm.bind(this));
+    this.#workouts.forEach(work => this._renderWorkoutMaker(work));
   }
   _showForm(mapE) {
     this.#mapEvent = mapE;
@@ -242,33 +248,48 @@ class App {
             <span class="workout__value">${workout.elevationGain}</span>
             <span class="workout__unit">m</span>
           </div>
-        </li> -->   
+        </li> 
     `;
     form.insertAdjacentHTML('afterend', html);
   }
-  _moveToPopup(e){
-    const workoutEl = e.target.closest('.workout')
-    console.log(workoutEl);
-    if(!workoutEl) return ;
-    const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
-    console.log(workout);
-    this.#map.setView(workout.coords, this.#mapZoomLevel,{
-      animate:true,
-      pan:{
-        duration:1
-      }
+  _moveToPopup(e) {
+    const workoutEl = e.target.closest('.workout');
+    // console.log(workoutEl);
+    if (!workoutEl) return;
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
+    );
+    // console.log(workout);
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
     });
     // using public interface:
-    workout.click();
+    // workout.click();
   }
-  _setLocalStorage(){
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts))
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
-  _getLocalStorage(){
-    const data = localStorage.getItem('workout');
-    console.log(data);
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    // console.log(data);
+    if (!data) return;
+    this.#workouts = data;
+    this.#workouts.forEach(work => this._renderWorkout(work));
   }
+  reset(){
+    localStorage.removeItem('workouts');
+    location.reload()
+  }
+  // edit workout 
+  // delete workout 
+  // delete all workout 
+  // sort workout 
+  // rebuild object from localStorage 
+ // more realistic error and confirmation messages
 }
 
 const app = new App();
-console.log(app);
+// console.log(app);

@@ -26,3 +26,6 @@ API
 https://countries-api-836d.onrender.com/countries/
 
 */
+///////////////////////////////////////
+const request  = new XMLHttpRequest();
+request.open('GET', '')

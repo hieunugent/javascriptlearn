@@ -27,5 +27,38 @@ https://countries-api-836d.onrender.com/countries/
 
 */
 ///////////////////////////////////////
-const request  = new XMLHttpRequest();
-request.open('GET', '')
+
+const getCountryData = function(country){
+const request = new XMLHttpRequest();
+request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+request.send();
+request.addEventListener('load', function () {
+  const [data] = JSON.parse(this.responseText);
+  const currency = Object.keys(data.currencies)[0]
+  const language = Object.keys(data.languages)[0]
+  
+  const html = `
+         <article class="country">
+          <img class="country__img" src="${data.flags.png}" />
+          <div class="country__data">
+            <h3 class="country__name">${data.name.common}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${(
+              +data.population / 1000000
+            ).toFixed(1)} M. people</p>
+            <p class="country__row"><span>🗣️</span>${data.languages[language]}</p>
+            <p class="country__row"><span>💰</span>${
+              data.currencies[currency].name
+            }</p>
+          </div>
+        </article>`;
+
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+});
+}
+getCountryData('vietnam');
+getCountryData('usa');
+getCountryData('british')
+getCountryData('spain')
+getCountryData('germany');

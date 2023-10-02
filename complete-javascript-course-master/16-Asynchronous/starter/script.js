@@ -25,20 +25,23 @@ There are be many types of APIs on web development: DOM API, Geolocation
 API
 https://countries-api-836d.onrender.com/countries/
 
+
+What is promiseS?
+    Promise: an Object that is used as a placeholder for the future result of an asynchronous opreration 
+    Promise a container for an asynchrously delivered value 
+    promise a container for a fulture value 
+    we no longer need to reply on events and callbacks passed into asynchronous functions to handle asynchronous resuls 
+    instead of nesting callbacks, we can chain promises for a sequence asynchronous operations: 
+    escaping callback hell 
+The promise LifeCycle:
+
 */
 ///////////////////////////////////////
-
-const getCountryData = function(country){
-const request = new XMLHttpRequest();
-request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-request.send();
-request.addEventListener('load', function () {
-  const [data] = JSON.parse(this.responseText);
-  const currency = Object.keys(data.currencies)[0]
-  const language = Object.keys(data.languages)[0]
-  
+const renderCountry = function (data, className = '') {
+  const [currency] = Object.keys(data.currencies);
+  const [language] = Object.keys(data.languages);
   const html = `
-         <article class="country">
+         <article class="country ${className}">
           <img class="country__img" src="${data.flags.png}" />
           <div class="country__data">
             <h3 class="country__name">${data.name.common}</h3>
@@ -46,7 +49,9 @@ request.addEventListener('load', function () {
             <p class="country__row"><span>👫</span>${(
               +data.population / 1000000
             ).toFixed(1)} M. people</p>
-            <p class="country__row"><span>🗣️</span>${data.languages[language]}</p>
+            <p class="country__row"><span>🗣️</span>${
+              data.languages[language]
+            }</p>
             <p class="country__row"><span>💰</span>${
               data.currencies[currency].name
             }</p>
@@ -55,10 +60,57 @@ request.addEventListener('load', function () {
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
   countriesContainer.style.opacity = 1;
-});
-}
-getCountryData('vietnam');
+};
+const getCountryAndNeighbor = function (country) {
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+  request.send();
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    renderCountry(data);
+    //Get Neighbor country
+    const [...neighbors] = data.borders;
+    if (!neighbors) return;
+
+    console.log(neighbors);
+    neighbors.forEach(neighbor => {
+      const request2 = new XMLHttpRequest();
+      request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbor}`);
+      request2.send();
+      request2.addEventListener('load', function () {
+        const [data2] = JSON.parse(this.responseText);
+        console.log(data2);
+        renderCountry(data2, 'neighbour');
+      });
+    });
+  });
+};
+// getCountryAndNeighbor('china');
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(function (res) {
+//       console.log(res);
+//       return res.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(res => res.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const [...neighbors] = data[0].borders;
+      console.log(neighbors);
+      if (!neighbors) return;
+      // country 2
+      
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`)
+    })
+    .then(res => res.json())
+    .then(data => renderCountry(data[0], 'neighbour'));
+};
 getCountryData('usa');
-getCountryData('british')
-getCountryData('spain')
-getCountryData('germany');

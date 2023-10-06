@@ -61,6 +61,11 @@ const renderCountry = function (data, className = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
   countriesContainer.style.opacity = 1;
 };
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+};
+
 const getCountryAndNeighbor = function (country) {
   const request = new XMLHttpRequest();
   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
@@ -97,20 +102,37 @@ const getCountryAndNeighbor = function (country) {
 //       renderCountry(data[0]);
 //     });
 // };
+const getJSON = function(url){
 
+}
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(res => res.json())
+    .then(res =>{ 
+      console.log(res);
+      // if (!res.ok){
+      //   throw new Error(`Country not Found (${res.status})`)
+      // }
+      return res.json()})
     .then(data => {
       renderCountry(data[0]);
       const [...neighbors] = data[0].borders;
       console.log(neighbors);
       if (!neighbors) return;
       // country 2
-      
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`)
+
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
     })
     .then(res => res.json())
-    .then(data => renderCountry(data[0], 'neighbour'));
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.log(`${err}🔖 🌖`);
+      renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
+    }).finally(()=>{
+      console.log('Ending call ');
+    });
 };
-getCountryData('usa');
+
+btn.addEventListener('click', function () {
+  getCountryData('china');
+});
+getCountryData("hongkong")

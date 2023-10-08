@@ -102,37 +102,64 @@ const getCountryAndNeighbor = function (country) {
 //       renderCountry(data[0]);
 //     });
 // };
-const getJSON = function(url){
-
-}
-const getCountryData = function (country) {
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(res =>{ 
-      console.log(res);
-      // if (!res.ok){
-      //   throw new Error(`Country not Found (${res.status})`)
-      // }
-      return res.json()})
-    .then(data => {
-      renderCountry(data[0]);
-      const [...neighbors] = data[0].borders;
-      console.log(neighbors);
-      if (!neighbors) return;
-      // country 2
-
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
-    })
-    .then(res => res.json())
-    .then(data => renderCountry(data[0], 'neighbour'))
-    .catch(err => {
-      console.log(`${err}🔖 🌖`);
-      renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
-    }).finally(()=>{
-      console.log('Ending call ');
-    });
+const getJSON = function (url, errorMsg= 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+    return response.json();
+  });
 };
+const getCountryData = function (country) {
+
+    getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not Found')
+      .then(data => {
+        renderCountry(data[0]);
+        const [...neighbors] = data[0].borders;
+        console.log(neighbors);
+        if (!neighbors) throw new Error('No neighbor found!');
+        // country 2
+        return getJSON(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`, 'Country Not Found');
+      })
+      .then(data => renderCountry(data[0], 'neighbour'))
+      .catch(err => {
+        console.log(`${err}🔖 🌖`);
+        renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
+      })
+      .finally(() => {
+        console.log('Ending call ');
+      });
+};
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(res =>{
+//       console.log(res);
+//       // if (!res.ok){
+//       //   throw new Error(`Country not Found (${res.status})`)
+//       // }
+//       return res.json()})
+//     .then(data => {
+//       renderCountry(data[0]);
+//       const [...neighbors] = data[0].borders;
+//       console.log(neighbors);
+//       if (!neighbors) return;
+//       // country 2
+
+//       return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
+//     })
+//     .then(res => res.json())
+//     .then(data => renderCountry(data[0], 'neighbour'))
+//     .catch(err => {
+//       console.log(`${err}🔖 🌖`);
+//       renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
+//     }).finally(()=>{
+//       console.log('Ending call ');
+//     });
+// };
 
 btn.addEventListener('click', function () {
-  getCountryData('china');
+      // do nothing now
 });
-getCountryData("hongkong")
+// challenger 1:
+
+const whereAmI = function(lat,lng){
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`).then(res => res.json())
+}

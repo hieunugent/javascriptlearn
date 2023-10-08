@@ -102,31 +102,33 @@ const getCountryAndNeighbor = function (country) {
 //       renderCountry(data[0]);
 //     });
 // };
-const getJSON = function (url, errorMsg= 'Something went wrong') {
+const getJSON = function (url, errorMsg = 'Something went wrong') {
   return fetch(url).then(response => {
     if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
     return response.json();
   });
 };
 const getCountryData = function (country) {
-
-    getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not Found')
-      .then(data => {
-        renderCountry(data[0]);
-        const [...neighbors] = data[0].borders;
-        console.log(neighbors);
-        if (!neighbors) throw new Error('No neighbor found!');
-        // country 2
-        return getJSON(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`, 'Country Not Found');
-      })
-      .then(data => renderCountry(data[0], 'neighbour'))
-      .catch(err => {
-        console.log(`${err}🔖 🌖`);
-        renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
-      })
-      .finally(() => {
-        console.log('Ending call ');
-      });
+  getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not Found')
+    .then(data => {
+      renderCountry(data[0]);
+      const [...neighbors] = data[0].borders;
+      console.log(neighbors);
+      if (!neighbors) throw new Error('No neighbor found!');
+      // country 2
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbors[0]}`,
+        'Country Not Found'
+      );
+    })
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.log(`${err}🔖 🌖`);
+      renderError(`Something went wrong 🤯 🤯 ${err} Try again!`);
+    })
+    .finally(() => {
+      console.log('Ending call ');
+    });
 };
 // const getCountryData = function (country) {
 //   fetch(`https://restcountries.com/v3.1/name/${country}`)
@@ -156,10 +158,28 @@ const getCountryData = function (country) {
 // };
 
 btn.addEventListener('click', function () {
-      // do nothing now
+  // do nothing now
+  whereAmI(33.6395671, -117.9050642);
 });
 // challenger 1:
 
-const whereAmI = function(lat,lng){
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`).then(res => res.json())
-}
+// const whereAmI =async function (lat, lng) {
+//   const url =
+//     `https://google-maps-geocoding.p.rapidapi.com/geocode/json?latlng=${lat}%2C${lng}&language=en`;
+  
+// const options = {
+// 	method: 'GET',
+// 	headers: {
+// 		'X-RapidAPI-Key': "",
+// 		'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
+// 	}
+// };
+
+// try {
+// 	const response = await fetch(url, options);
+// 	const result = await response.text();
+// 	console.log(result);
+// } catch (error) {
+// 	console.error(error);
+// }
+// }

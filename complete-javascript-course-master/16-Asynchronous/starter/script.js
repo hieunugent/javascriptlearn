@@ -159,27 +159,42 @@ const getCountryData = function (country) {
 
 btn.addEventListener('click', function () {
   // do nothing now
-  whereAmI(33.6395671, -117.9050642);
+  whereAmI();
 });
 // challenger 1:
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
 
-// const whereAmI =async function (lat, lng) {
-//   const url =
-//     `https://google-maps-geocoding.p.rapidapi.com/geocode/json?latlng=${lat}%2C${lng}&language=en`;
-  
-// const options = {
-// 	method: 'GET',
-// 	headers: {
-// 		'X-RapidAPI-Key': "",
-// 		'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
-// 	}
-// };
+const whereAmI =async function (lat, lng) {
+ getPosition().then(pos => {
+    const { lat= latitude, lng= longitude } = pos.coords;
 
-// try {
-// 	const response = await fetch(url, options);
-// 	const result = await response.text();
-// 	console.log(result);
-// } catch (error) {
-// 	console.error(error);
-// }
-// }
+  });
+  const url =
+    `https://google-maps-geocoding.p.rapidapi.com/geocode/json?latlng=${lat}%2C${lng}&language=en`;
+
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': "",
+		'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
+	}
+};
+
+try {
+	const response = await fetch(url, options);
+	const result = await response.text();
+	console.log(result);
+} catch (error) {
+	console.error(error);
+}
+}
+
+

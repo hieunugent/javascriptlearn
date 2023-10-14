@@ -157,44 +157,78 @@ const getCountryData = function (country) {
 //     });
 // };
 
-btn.addEventListener('click', function () {
-  // do nothing now
-  whereAmI();
-});
-// challenger 1:
-const getPosition = function () {
-  return new Promise(function (resolve, reject) {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => resolve(position),
-    //   err => reject(err)
-    // );
-    navigator.geolocation.getCurrentPosition(resolve, reject);
+// btn.addEventListener('click', function () {
+//   // do nothing now
+//   whereAmI();
+// });
+// // challenger 1:
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+
+// const whereAmI =async function (lat, lng) {
+//  getPosition().then(pos => {
+//     const { lat= latitude, lng= longitude } = pos.coords;
+
+//   });
+//   const url =
+//     `https://google-maps-geocoding.p.rapidapi.com/geocode/json?latlng=${lat}%2C${lng}&language=en`;
+
+// const options = {
+// 	method: 'GET',
+// 	headers: {
+// 		'X-RapidAPI-Key': "",
+// 		'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
+// 	}
+// };
+
+// try {
+// 	const response = await fetch(url, options);
+// 	const result = await response.text();
+// 	console.log(result);
+// } catch (error) {
+// 	console.error(error);
+// }
+// }
+
+const imgContainer = document.querySelector('.images')
+ const createImage = function(imgPath){
+  return new Promise(function(resolve, reject){
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function(){
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function(){
+      reject(new Error('Image not Found'))
+    });
+
   });
-};
+ }
+ const wait = function (ms) {
+   return new Promise(resolve => setTimeout(resolve, ms*1000))
+ };
+  let currentImg 
+ createImage('img/img-1.jpg').then(img => {
+   currentImg = img;
+   console.log('Image 1 loaded');
+   return wait(2);
+ }).then(()=>{
+  currentImg.style.display = 'none';
+  return createImage('img/img-2.jpg')
 
-const whereAmI =async function (lat, lng) {
- getPosition().then(pos => {
-    const { lat= latitude, lng= longitude } = pos.coords;
-
-  });
-  const url =
-    `https://google-maps-geocoding.p.rapidapi.com/geocode/json?latlng=${lat}%2C${lng}&language=en`;
-
-const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': "",
-		'X-RapidAPI-Host': 'google-maps-geocoding.p.rapidapi.com'
-	}
-};
-
-try {
-	const response = await fetch(url, options);
-	const result = await response.text();
-	console.log(result);
-} catch (error) {
-	console.error(error);
-}
-}
-
+ }).then(img => {
+    currentImg = img;
+    console.log('Image 2 loaded');
+    return wait(2);
+ }).then(()=> {
+  currentImg.style.display = 'none';
+ }).catch(err => console.error(err));
 

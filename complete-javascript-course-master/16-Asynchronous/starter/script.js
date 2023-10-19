@@ -215,7 +215,7 @@ const getCountryData = function (country) {
 //  const wait = function (ms) {
 //    return new Promise(resolve => setTimeout(resolve, ms*1000))
 //  };
-//   let currentImg 
+//   let currentImg
 //  createImage('img/img-1.jpg').then(img => {
 //    currentImg = img;
 //    console.log('Image 1 loaded');
@@ -232,3 +232,57 @@ const getCountryData = function (country) {
 //   currentImg.style.display = 'none';
 //  }).catch(err => console.error(err));
 
+// (async function () {
+//   try {
+//     console.log('this is try statement');
+//   } catch (err) {
+//     console.error('this is error');
+//   }
+//   console.log('after the try catch ');
+// })();
+// Promise All work as paralel
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+    const data  = await Promise.all(
+      [getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),]
+    );
+    console.log(data.map(d => String(d[0].capital)));
+    // console.log(data1.capital, data2.capital, data3.capital);
+  } catch (err) {
+    console.error(err);
+  }
+};
+get3Countries('portugal', 'canada', 'vietnam')
+
+// Promise.race same as all but each promise will race with one another then 
+const timeout = function(sec){
+  return new Promise(function (_, reject){
+    setTimeout(function(){
+      reject(new Error('Request Took to long!'));
+    }, sec*1000)
+  })
+}
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/vietnam`),
+  timeout(5),
+]).then(res => console.log(res[0])).catch(err => console.log(err))
+// Promise.allSettled
+Promise.allSettled([
+  Promise.resolve('success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another Success'),
+]).then(res => console.log(res)).catch(err => console.error(err))
+// Promise.any 
+
+Promise.any([
+  Promise.resolve('success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));

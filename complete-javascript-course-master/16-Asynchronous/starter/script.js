@@ -197,24 +197,23 @@ const getCountryData = function (country) {
 // }
 // }
 
-// const imgContainer = document.querySelector('.images')
-//  const createImage = function(imgPath){
-//   return new Promise(function(resolve, reject){
-//     const img = document.createElement('img');
-//     img.src = imgPath;
-//     img.addEventListener('load', function(){
-//       imgContainer.append(img);
-//       resolve(img);
-//     });
-//     img.addEventListener('error', function(){
-//       reject(new Error('Image not Found'))
-//     });
-
-//   });
-//  }
- const wait = function (ms) {
-   return new Promise(resolve => setTimeout(resolve, ms*1000))
- };
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Image not Found'));
+    });
+  });
+};
+const wait = function (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms * 1000));
+};
 //   let currentImg
 //  createImage('img/img-1.jpg').then(img => {
 //    currentImg = img;
@@ -232,52 +231,91 @@ const getCountryData = function (country) {
 //   currentImg.style.display = 'none';
 //  }).catch(err => console.error(err));
 
-// (async function () {
-//   try {
-//     console.log('this is try statement');
-//   } catch (err) {
-//     console.error('this is error');
-//   }
-//   console.log('after the try catch ');
-// })();
+(async function () {
+  try {
+    console.log('this is try statement');
+  } catch (err) {
+    console.error('this is error');
+  }
+  console.log('after the try catch ');
+})();
+const loadNPause = async function () {
+  try {
+    let img = await createImage('img/img-1.jpg');
+    console.log('image 1 is loading ');
+    await wait(2);
+    img.style.display = 'none';
+    img = await createImage('img/img-2.jpg');
+    console.log('image 2 is loading ');
+    await wait(2);
+    img.style.display = 'none';
+    img = await createImage('img/img-3.jpg');
+    console.log('image 3 is loading ');
+    await wait(2);
+    img.style.display = 'none';
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// loadNPause();
+
+const loadAll = async function (imgArr) {
+  try {
+    const imgs = imgArr.map(async img => await createImage(img));
+    const imgsEl = await Promise.all(imgs);
+    console.log(imgsEl);
+    imgsEl.forEach(img => img.classList.add('parallel'));
+;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
+
 // Promise All work as paralel
 const get3Countries = async function (c1, c2, c3) {
   try {
     // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
     // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
     // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
-    const data  = await Promise.all(
-      [getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
       getJSON(`https://restcountries.com/v3.1/name/${c2}`),
-      getJSON(`https://restcountries.com/v3.1/name/${c3}`),]
-    );
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
     console.log(data.map(d => String(d[0].capital)));
     // console.log(data1.capital, data2.capital, data3.capital);
   } catch (err) {
     console.error(err);
   }
 };
-get3Countries('portugal', 'canada', 'vietnam')
+get3Countries('portugal', 'canada', 'vietnam');
 
-// Promise.race same as all but each promise will race with one another then 
-const timeout = function(sec){
-  return new Promise(function (_, reject){
-    setTimeout(function(){
+// Promise.race same as all but each promise will race with one another then
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
       reject(new Error('Request Took to long!'));
-    }, sec*1000)
-  })
-}
+    }, sec * 1000);
+  });
+};
 Promise.race([
   getJSON(`https://restcountries.com/v3.1/name/vietnam`),
   timeout(5),
-]).then(res => console.log(res[0])).catch(err => console.log(err))
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.log(err));
 // Promise.allSettled
 Promise.allSettled([
   Promise.resolve('success'),
   Promise.reject('Error'),
   Promise.resolve('Another Success'),
-]).then(res => console.log(res)).catch(err => console.error(err))
-// Promise.any 
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+// Promise.any
 
 Promise.any([
   Promise.resolve('success'),
@@ -286,4 +324,3 @@ Promise.any([
 ])
   .then(res => console.log(res))
   .catch(err => console.error(err));
-

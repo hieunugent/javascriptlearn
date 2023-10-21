@@ -212,9 +212,9 @@ const getCountryData = function (country) {
 
 //   });
 //  }
-//  const wait = function (ms) {
-//    return new Promise(resolve => setTimeout(resolve, ms*1000))
-//  };
+ const wait = function (ms) {
+   return new Promise(resolve => setTimeout(resolve, ms*1000))
+ };
 //   let currentImg
 //  createImage('img/img-1.jpg').then(img => {
 //    currentImg = img;
@@ -286,3 +286,4 @@ Promise.any([
 ])
   .then(res => console.log(res))
   .catch(err => console.error(err));
+

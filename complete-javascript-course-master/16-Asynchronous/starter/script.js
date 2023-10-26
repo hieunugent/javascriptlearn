@@ -324,3 +324,18 @@ Promise.any([
 ])
   .then(res => console.log(res))
   .catch(err => console.error(err));
+
+const budget = [
+  {value: 250, description:'Sold old Tv', user:'jonas'}
+]
+const spendingLimits = Object.freeze({
+  jonas:1500,
+  henry:2000,
+});
+const getLimit  = user => spendingLimits?.[user] ?? 0;
+const addExpense = function(states, limits, value, description, user = 'join'){
+  const cleanUser = user.toLowerCase();
+  if(value <= getLimit(cleanUser)){
+    burget.push({value:-value, description, user: cleanUser});
+  }
+}

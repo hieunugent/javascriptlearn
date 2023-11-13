@@ -1,4 +1,4 @@
-import icons from 'url:../img/icons.svg'
+import icons from 'url:../img/icons.svg';
 const recipeContainer = document.querySelector('.recipe');
 
 const timeout = function (s) {
@@ -12,9 +12,21 @@ const timeout = function (s) {
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
-
+const renderSpinner = function (parentEl) {
+  const markup = `
+  <div class="spinner">
+          <svg>
+            <use href="${icons}#icon-loader"></use>
+          </svg>
+        </div> 
+  `;
+  parentEl.innerHTML = '';
+  parentEl.insertAdjacentHTML('afterbegin', markup);
+};
 const showRecipe = async function () {
   try {
+    // loading spinner
+    renderSpinner(recipeContainer);
     const res = await fetch(
       'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886'
     );
@@ -94,8 +106,9 @@ const showRecipe = async function () {
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
-            ${recipe.ingredients.map(ing => {
-              return `
+            ${recipe.ingredients
+              .map(ing => {
+                return `
                  <li class="recipe__ingredient">
                    <svg class="recipe__icon">
                       <use href="${icons}#icon-check"></use>
@@ -107,7 +120,8 @@ const showRecipe = async function () {
                  </div>
             </li>
               `;
-            }).join('')}
+              })
+              .join('')}
           </ul>
         </div>
 
@@ -136,6 +150,6 @@ const showRecipe = async function () {
     recipeContainer.insertAdjacentHTML('afterbegin', markup);
   } catch (error) {
     alert(error);
-  } 
+  }
 };
 showRecipe();

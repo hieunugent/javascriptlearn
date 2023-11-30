@@ -59,9 +59,12 @@ const controlSearchResults = async function(){
     console.log(error);
   }
 }
-
+const controlPagination = function(){
+  console.log('Pad controller');
+}
 const init = function(){
   recipeView.addHandlerRender(controlRecipes);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 };
 init();

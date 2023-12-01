@@ -8,9 +8,9 @@ addHandlerClick(handler){
     const btn = e.target.closest('.btn--inline');
     if(!btn) return ;
     console.log(btn);
-    const goToPage = btn.dataset.goto;
+    const goToPage = +btn.dataset.goto;// converse the number data
     console.log(goToPage);
-    handler()
+    handler(goToPage);
   })
 }
 

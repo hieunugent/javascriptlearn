@@ -15,9 +15,9 @@ const recipeContainer = document.querySelector('.recipe');
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
-// if (module.hot){
-//   module.hot.accept()
-// }
+if (module.hot){
+  module.hot.accept()
+}
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -59,8 +59,15 @@ const controlSearchResults = async function(){
     console.log(error);
   }
 }
-const controlPagination = function(){
-  console.log('Pad controller');
+const controlPagination = function(goToPage){
+  // 1. Render new results
+  // console.log(model.state.search.results);
+    resultView.render(model.getSearchResultsPage(goToPage));
+
+
+  // 2. Render new pagination buttons
+     paginationView.render(model.state.search);
+
 }
 const init = function(){
   recipeView.addHandlerRender(controlRecipes);

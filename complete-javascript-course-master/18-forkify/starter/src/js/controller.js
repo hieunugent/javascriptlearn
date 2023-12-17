@@ -67,7 +67,9 @@ const controlPagination = function(goToPage){
 
 
   // 2. Render new pagination buttons
-     paginationView.render(model.state.search);
+    //  paginationView.render(model.state.search);
+     paginationView.update(model.state.search);
+
 
 }
 

@@ -52,7 +52,7 @@ const controlSearchResults = async function () {
 
     // 4. render initial pagination button
     paginationView.render(model.state.search);
-  } catch (error) {
+  } catch (error) { 
     console.log(error);
   }
 };
@@ -75,8 +75,13 @@ const controlServing = function (updateTo) {
   recipeView.update(model.state.recipe);
 };
 const controlAddBookmark = function(){
+  if(!model.state.recipe.bookmarked)
   model.addBookmark(model.state.recipe);
+  else if(model.state.recipe.bookmarked)
+  model.deleteBookmark(model.state.recipe.id);
+
   console.log(model.state.recipe);
+  recipeView.update(model.state.recipe);
 }
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
